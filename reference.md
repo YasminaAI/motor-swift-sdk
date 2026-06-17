@@ -114,7 +114,7 @@ try await main()
 </dl>
 </details>
 
-<details><summary><code>client.quotes.<a href="/Sources/Resources/Quotes/QuotesClient.swift">listQuotes</a>(requestOptions: RequestOptions?) -> GetQuoteRequestsResponse</code></summary>
+<details><summary><code>client.quotes.<a href="/Sources/Resources/Quotes/QuotesClient.swift">listQuotes</a>(dateFrom: CalendarDate?, dateTo: CalendarDate?, perPage: Int?, includeAggregates: Bool?, requestOptions: RequestOptions?) -> PaginatedQuoteResponse</code></summary>
 <dl>
 <dd>
 
@@ -133,7 +133,12 @@ import Api
 private func main() async throws {
     let client = ApiClient(token: "<token>")
 
-    _ = try await client.quotes.listQuotes()
+    _ = try await client.quotes.listQuotes(
+        dateFrom: CalendarDate("2026-06-01")!,
+        dateTo: CalendarDate("2026-06-30")!,
+        perPage: 10,
+        includeAggregates: true
+    )
 }
 
 try await main()
@@ -147,6 +152,38 @@ try await main()
 
 <dl>
 <dd>
+
+<dl>
+<dd>
+
+**dateFrom:** `CalendarDate?` — Inclusive lower bound for quote request creation date.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**dateTo:** `CalendarDate?` — Inclusive upper bound for quote request creation date.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**perPage:** `Int?` — Number of quote requests to return per page.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**includeAggregates:** `Bool?` — When true, includes quote request totals and monthly buckets for the filtered result set.
+    
+</dd>
+</dl>
 
 <dl>
 <dd>
@@ -198,10 +235,10 @@ private func main() async throws {
     let client = ApiClient(token: "<token>")
 
     _ = try await client.quotes.requestQuotes(request: .init(
+        otp: "123456",
         ownerId: "owner_id",
         phone: "phone",
         birthdate: CalendarDate("2023-01-15")!,
-        carSequenceNumber: "car_sequence_number",
         carEstimatedCost: 1.1
     ))
 }
@@ -313,7 +350,7 @@ try await main()
 </dl>
 </details>
 
-<details><summary><code>client.policies.<a href="/Sources/Resources/Policies/PoliciesClient.swift">listPolicies</a>(quoteRequestId: Int?, quotePriceId: String?, providerPolicyId: Int?, carSequenceNumber: String?, newOwnerId: String?, previousOwnerId: String?, status: Int?, minPrice: Double?, maxPrice: Double?, perPage: Int?, requestOptions: RequestOptions?) -> [Policy]</code></summary>
+<details><summary><code>client.policies.<a href="/Sources/Resources/Policies/PoliciesClient.swift">listPolicies</a>(quoteRequestId: Int?, quotePriceId: String?, providerPolicyId: Int?, carSequenceNumber: String?, newOwnerId: String?, previousOwnerId: String?, status: Int?, minPrice: Double?, maxPrice: Double?, perPage: Int?, dateFrom: CalendarDate?, dateTo: CalendarDate?, includeAggregates: Bool?, requestOptions: RequestOptions?) -> PaginatedPolicyResponse</code></summary>
 <dl>
 <dd>
 
@@ -346,7 +383,11 @@ import Api
 private func main() async throws {
     let client = ApiClient(token: "<token>")
 
-    _ = try await client.policies.listPolicies()
+    _ = try await client.policies.listPolicies(
+        dateFrom: CalendarDate("2026-06-01")!,
+        dateTo: CalendarDate("2026-06-30")!,
+        includeAggregates: true
+    )
 }
 
 try await main()
@@ -444,6 +485,30 @@ try await main()
 <dl>
 <dd>
 
+**dateFrom:** `CalendarDate?` — Inclusive lower bound for the policy date. For issued policies (`status=1`), this filters by `uploaded_at` (the provider policy issue timestamp) and falls back to `created_at` when `uploaded_at` is unavailable. For other statuses, this filters by `created_at`.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**dateTo:** `CalendarDate?` — Inclusive upper bound for the policy date. For issued policies (`status=1`), this filters by `uploaded_at` (the provider policy issue timestamp) and falls back to `created_at` when `uploaded_at` is unavailable. For other statuses, this filters by `created_at`.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**includeAggregates:** `Bool?` — When true, includes policy totals, total price, and monthly buckets for the filtered result set.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **requestOptions:** `RequestOptions?` — Additional options for configuring the request, such as custom headers or timeout settings.
     
 </dd>
@@ -490,6 +555,7 @@ private func main() async throws {
     let client = ApiClient(token: "<token>")
 
     _ = try await client.policies.issuePolicy(request: .init(
+        otp: "123456",
         quoteRequestId: 123,
         quoteReferenceId: "550e8400-e29b-41d4-a716-446655440000",
         quotePriceId: "550e8400-e29b-41d4-a716-446655440001"

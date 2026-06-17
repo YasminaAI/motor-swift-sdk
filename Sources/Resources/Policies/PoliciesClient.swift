@@ -21,8 +21,11 @@ public final class PoliciesClient: Sendable {
 
     /// Listing requested policies
     ///
+    /// - Parameter dateFrom: Inclusive lower bound for the policy date. For issued policies (`status=1`), this filters by `uploaded_at` (the provider policy issue timestamp) and falls back to `created_at` when `uploaded_at` is unavailable. For other statuses, this filters by `created_at`.
+    /// - Parameter dateTo: Inclusive upper bound for the policy date. For issued policies (`status=1`), this filters by `uploaded_at` (the provider policy issue timestamp) and falls back to `created_at` when `uploaded_at` is unavailable. For other statuses, this filters by `created_at`.
+    /// - Parameter includeAggregates: When true, includes policy totals, total price, and monthly buckets for the filtered result set.
     /// - Parameter requestOptions: Additional options for configuring the request, such as custom headers or timeout settings.
-    public func listPolicies(quoteRequestId: Int? = nil, quotePriceId: String? = nil, providerPolicyId: Int? = nil, carSequenceNumber: String? = nil, newOwnerId: String? = nil, previousOwnerId: String? = nil, status: Int? = nil, minPrice: Double? = nil, maxPrice: Double? = nil, perPage: Int? = nil, requestOptions: RequestOptions? = nil) async throws -> [Policy] {
+    public func listPolicies(quoteRequestId: Int? = nil, quotePriceId: String? = nil, providerPolicyId: Int? = nil, carSequenceNumber: String? = nil, newOwnerId: String? = nil, previousOwnerId: String? = nil, status: Int? = nil, minPrice: Double? = nil, maxPrice: Double? = nil, perPage: Int? = nil, dateFrom: CalendarDate? = nil, dateTo: CalendarDate? = nil, includeAggregates: Bool? = nil, requestOptions: RequestOptions? = nil) async throws -> PaginatedPolicyResponse {
         return try await httpClient.performRequest(
             method: .get,
             path: "/policies",
@@ -36,10 +39,13 @@ public final class PoliciesClient: Sendable {
                 "status": status.map { .int($0) }, 
                 "min_price": minPrice.map { .double($0) }, 
                 "max_price": maxPrice.map { .double($0) }, 
-                "per_page": perPage.map { .int($0) }
+                "per_page": perPage.map { .int($0) }, 
+                "date_from": dateFrom.map { .calendarDate($0) }, 
+                "date_to": dateTo.map { .calendarDate($0) }, 
+                "include_aggregates": includeAggregates.map { .bool($0) }
             ],
             requestOptions: requestOptions,
-            responseType: [Policy].self
+            responseType: PaginatedPolicyResponse.self
         )
     }
 

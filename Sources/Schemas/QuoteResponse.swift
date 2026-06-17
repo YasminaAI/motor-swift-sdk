@@ -9,6 +9,8 @@ public struct QuoteResponse: Codable, Hashable, Sendable {
     public let birthdate: CalendarDate?
     /// The car sequence number from 9 digits
     public let carSequenceNumber: Int?
+    /// Custom car number for newly imported cars (present when `custom_number` was used in the request)
+    public let customNumber: String?
     /// Whether it was a car transfer or not
     public let isOwnershipTransfer: Bool?
     /// The estimated cost of the car
@@ -37,6 +39,7 @@ public struct QuoteResponse: Codable, Hashable, Sendable {
         phone: String? = nil,
         birthdate: CalendarDate? = nil,
         carSequenceNumber: Int? = nil,
+        customNumber: String? = nil,
         isOwnershipTransfer: Bool? = nil,
         carEstimatedCost: Double? = nil,
         carModelYear: Int? = nil,
@@ -53,6 +56,7 @@ public struct QuoteResponse: Codable, Hashable, Sendable {
         self.phone = phone
         self.birthdate = birthdate
         self.carSequenceNumber = carSequenceNumber
+        self.customNumber = customNumber
         self.isOwnershipTransfer = isOwnershipTransfer
         self.carEstimatedCost = carEstimatedCost
         self.carModelYear = carModelYear
@@ -72,6 +76,7 @@ public struct QuoteResponse: Codable, Hashable, Sendable {
         self.phone = try container.decodeIfPresent(String.self, forKey: .phone)
         self.birthdate = try container.decodeIfPresent(CalendarDate.self, forKey: .birthdate)
         self.carSequenceNumber = try container.decodeIfPresent(Int.self, forKey: .carSequenceNumber)
+        self.customNumber = try container.decodeIfPresent(String.self, forKey: .customNumber)
         self.isOwnershipTransfer = try container.decodeIfPresent(Bool.self, forKey: .isOwnershipTransfer)
         self.carEstimatedCost = try container.decodeIfPresent(Double.self, forKey: .carEstimatedCost)
         self.carModelYear = try container.decodeIfPresent(Int.self, forKey: .carModelYear)
@@ -92,6 +97,7 @@ public struct QuoteResponse: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.phone, forKey: .phone)
         try container.encodeIfPresent(self.birthdate, forKey: .birthdate)
         try container.encodeIfPresent(self.carSequenceNumber, forKey: .carSequenceNumber)
+        try container.encodeIfPresent(self.customNumber, forKey: .customNumber)
         try container.encodeIfPresent(self.isOwnershipTransfer, forKey: .isOwnershipTransfer)
         try container.encodeIfPresent(self.carEstimatedCost, forKey: .carEstimatedCost)
         try container.encodeIfPresent(self.carModelYear, forKey: .carModelYear)
@@ -110,6 +116,7 @@ public struct QuoteResponse: Codable, Hashable, Sendable {
         case phone
         case birthdate
         case carSequenceNumber = "car_sequence_number"
+        case customNumber = "custom_number"
         case isOwnershipTransfer = "is_ownership_transfer"
         case carEstimatedCost = "car_estimated_cost"
         case carModelYear = "car_model_year"

@@ -4,6 +4,8 @@ public struct Benefit: Codable, Hashable, Sendable {
     public let quoteBenefitId: String?
     public let id: String?
     public let name: String?
+    /// Arabic name of the benefit. Use this field instead of `name` when rendering Arabic UIs.
+    public let nameAr: String?
     public let amount: Double?
     public let vat: Double?
     public let url: Nullable<String>?
@@ -14,6 +16,7 @@ public struct Benefit: Codable, Hashable, Sendable {
         quoteBenefitId: String? = nil,
         id: String? = nil,
         name: String? = nil,
+        nameAr: String? = nil,
         amount: Double? = nil,
         vat: Double? = nil,
         url: Nullable<String>? = nil,
@@ -22,6 +25,7 @@ public struct Benefit: Codable, Hashable, Sendable {
         self.quoteBenefitId = quoteBenefitId
         self.id = id
         self.name = name
+        self.nameAr = nameAr
         self.amount = amount
         self.vat = vat
         self.url = url
@@ -33,6 +37,7 @@ public struct Benefit: Codable, Hashable, Sendable {
         self.quoteBenefitId = try container.decodeIfPresent(String.self, forKey: .quoteBenefitId)
         self.id = try container.decodeIfPresent(String.self, forKey: .id)
         self.name = try container.decodeIfPresent(String.self, forKey: .name)
+        self.nameAr = try container.decodeIfPresent(String.self, forKey: .nameAr)
         self.amount = try container.decodeIfPresent(Double.self, forKey: .amount)
         self.vat = try container.decodeIfPresent(Double.self, forKey: .vat)
         self.url = try container.decodeNullableIfPresent(String.self, forKey: .url)
@@ -45,6 +50,7 @@ public struct Benefit: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.quoteBenefitId, forKey: .quoteBenefitId)
         try container.encodeIfPresent(self.id, forKey: .id)
         try container.encodeIfPresent(self.name, forKey: .name)
+        try container.encodeIfPresent(self.nameAr, forKey: .nameAr)
         try container.encodeIfPresent(self.amount, forKey: .amount)
         try container.encodeIfPresent(self.vat, forKey: .vat)
         try container.encodeNullableIfPresent(self.url, forKey: .url)
@@ -55,6 +61,7 @@ public struct Benefit: Codable, Hashable, Sendable {
         case quoteBenefitId = "quote_benefit_id"
         case id
         case name
+        case nameAr = "name_ar"
         case amount
         case vat
         case url

@@ -36,7 +36,7 @@ With Swift Package Manager (SPM), add the following to the top-level `dependenci
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/YasminaAI/motor-swift-sdk", from: "0.0.27"),
+    .package(url: "https://github.com/YasminaAI/motor-swift-sdk", from: "0.0.28"),
 ]
 ```
 
@@ -56,10 +56,10 @@ private func main() async throws {
     let client = ApiClient(token: "<token>")
 
     _ = try await client.quotes.requestQuotes(request: .init(
+        otp: "123456",
         ownerId: "owner_id",
         phone: "phone",
         birthdate: CalendarDate("2023-01-15")!,
-        carSequenceNumber: "car_sequence_number",
         carEstimatedCost: 1.1
     ))
 }
@@ -76,7 +76,7 @@ import Api
 
 let client = ApiClient(
     token: "YOUR_API_KEY",
-    environment: .default
+    environment: .sandbox
 )
 ```
 

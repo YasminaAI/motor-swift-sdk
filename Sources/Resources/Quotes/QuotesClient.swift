@@ -25,12 +25,18 @@ public final class QuotesClient: Sendable {
         )
     }
 
-    public func listQuotes(requestOptions: RequestOptions? = nil) async throws -> GetQuoteRequestsResponse {
+    public func listQuotes(dateFrom: CalendarDate? = nil, dateTo: CalendarDate? = nil, perPage: Int? = nil, includeAggregates: Bool? = nil, requestOptions: RequestOptions? = nil) async throws -> PaginatedQuoteResponse {
         return try await httpClient.performRequest(
             method: .get,
             path: "/quote-requests",
+            queryParams: [
+                "date_from": dateFrom.map { .calendarDate($0) }, 
+                "date_to": dateTo.map { .calendarDate($0) }, 
+                "per_page": perPage.map { .int($0) }, 
+                "include_aggregates": includeAggregates.map { .bool($0) }
+            ],
             requestOptions: requestOptions,
-            responseType: GetQuoteRequestsResponse.self
+            responseType: PaginatedQuoteResponse.self
         )
     }
 
