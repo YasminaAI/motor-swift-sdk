@@ -1,6 +1,6 @@
 # Yasminaai Swift Library
 
-[![fern shield](https://img.shields.io/badge/%F0%9F%8C%BF-Built%20with%20Fern-brightgreen)](https://buildwithfern.com?utm_source=github&utm_medium=github&utm_campaign=readme&utm_source=https%3A%2F%2Fgithub.com%2Fyasminaai%2Fmotor-swift-sdk)
+[![fern shield](https://img.shields.io/badge/%F0%9F%8C%BF-Built%20with%20Fern-brightgreen)](https://buildwithfern.com?utm_source=github&utm_medium=github&utm_campaign=readme&utm_source=https%3A%2F%2Fgithub.com%2FYasminaAI%2Fmotor-swift-sdk)
 ![SwiftPM compatible](https://img.shields.io/badge/SwiftPM-compatible-orange.svg)
 
 The Yasminaai Swift library provides convenient access to the Yasminaai APIs from Swift.
@@ -36,13 +36,13 @@ With Swift Package Manager (SPM), add the following to the top-level `dependenci
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/yasminaai/motor-swift-sdk", from: "0.0.45"),
+    .package(url: "https://github.com/YasminaAI/motor-swift-sdk", from: "0.0.47"),
 ]
 ```
 
 ## Reference
 
-A full reference for this library is available [here](https://github.com/yasminaai/motor-swift-sdk/blob/HEAD/./reference.md).
+A full reference for this library is available [here](https://github.com/YasminaAI/motor-swift-sdk/blob/HEAD/./reference.md).
 
 ## Usage
 
