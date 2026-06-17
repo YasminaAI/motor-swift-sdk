@@ -13,6 +13,7 @@ import Api
                   "phone": "phone",
                   "birthdate": "2023-01-15",
                   "car_sequence_number": 1,
+                  "custom_number": "custom_number",
                   "is_ownership_transfer": true,
                   "car_estimated_cost": 1.1,
                   "car_model_year": 1,
@@ -27,6 +28,12 @@ import Api
                   "quotes": [
                     {
                       "company_name": "company_name",
+                      "company_name_ar": "company_name_ar",
+                      "type": "TPL",
+                      "insurance_type_display": "insurance_type_display",
+                      "insurance_type_display_ar": "insurance_type_display_ar",
+                      "company_logo_url": "company_logo_url",
+                      "square_company_logo_url": "square_company_logo_url",
                       "prices": [
                         {
                           "vat_percentage": 15
@@ -55,6 +62,7 @@ import Api
             phone: Optional("phone"),
             birthdate: Optional(CalendarDate("2023-01-15")!),
             carSequenceNumber: Optional(1),
+            customNumber: Optional("custom_number"),
             isOwnershipTransfer: Optional(true),
             carEstimatedCost: Optional(1.1),
             carModelYear: Optional(1),
@@ -69,6 +77,12 @@ import Api
             quotes: Optional([
                 QuoteResponseQuotesItem(
                     companyName: Optional("company_name"),
+                    companyNameAr: Optional("company_name_ar"),
+                    type: Optional(.tpl),
+                    insuranceTypeDisplay: Optional("insurance_type_display"),
+                    insuranceTypeDisplayAr: Optional("insurance_type_display_ar"),
+                    companyLogoUrl: Optional("company_logo_url"),
+                    squareCompanyLogoUrl: Optional("square_company_logo_url"),
                     prices: Optional([
                         QuotePrice(
                             vatPercentage: Optional(15)
@@ -132,6 +146,7 @@ import Api
                       "phone": "phone",
                       "birthdate": "2023-01-15",
                       "car_sequence_number": 1,
+                      "custom_number": "custom_number",
                       "is_ownership_transfer": true,
                       "car_estimated_cost": 1.1,
                       "car_model_year": 1,
@@ -170,7 +185,13 @@ import Api
                   "per_page": 1,
                   "prev_page_url": "prev_page_url",
                   "to": 1,
-                  "total": 1
+                  "total": 1,
+                  "aggregates": {
+                    "total_count": 24,
+                    "by_month": {
+                      "2026-06": 24
+                    }
+                  }
                 }
                 """#.utf8
             )
@@ -180,7 +201,7 @@ import Api
             token: "<token>",
             urlSession: stub.urlSession
         )
-        let expectedResponse = GetQuoteRequestsResponse(
+        let expectedResponse = PaginatedQuoteResponse(
             currentPage: Optional(1),
             data: Optional([
                 QuoteResponse(
@@ -188,6 +209,7 @@ import Api
                     phone: Optional("phone"),
                     birthdate: Optional(CalendarDate("2023-01-15")!),
                     carSequenceNumber: Optional(1),
+                    customNumber: Optional("custom_number"),
                     isOwnershipTransfer: Optional(true),
                     carEstimatedCost: Optional(1.1),
                     carModelYear: Optional(1),
@@ -217,20 +239,32 @@ import Api
             lastPage: Optional(1),
             lastPageUrl: Optional("last_page_url"),
             links: Optional([
-                GetQuoteRequestsResponseLinksItem(
-                    url: Optional("url"),
+                PaginationLink(
+                    url: Optional(Nullable<String>.value("url")),
                     label: Optional("label"),
                     active: Optional(true)
                 )
             ]),
-            nextPageUrl: Optional("next_page_url"),
+            nextPageUrl: Optional(Nullable<String>.value("next_page_url")),
             path: Optional("path"),
             perPage: Optional(1),
-            prevPageUrl: Optional("prev_page_url"),
+            prevPageUrl: Optional(Nullable<String>.value("prev_page_url")),
             to: Optional(Nullable<Int>.value(1)),
-            total: Optional(1)
+            total: Optional(1),
+            aggregates: Optional(QuoteRequestAggregates(
+                totalCount: Optional(24),
+                byMonth: Optional([
+                    "2026-06": 24
+                ])
+            ))
         )
-        let response = try await client.quotes.listQuotes(requestOptions: RequestOptions(additionalHeaders: stub.headers))
+        let response = try await client.quotes.listQuotes(
+            dateFrom: CalendarDate("2026-06-01")!,
+            dateTo: CalendarDate("2026-06-30")!,
+            perPage: 10,
+            includeAggregates: true,
+            requestOptions: RequestOptions(additionalHeaders: stub.headers)
+        )
         try #require(response == expectedResponse)
     }
 
@@ -244,6 +278,7 @@ import Api
                   "phone": "phone",
                   "birthdate": "2023-01-15",
                   "car_sequence_number": 1,
+                  "custom_number": "custom_number",
                   "is_ownership_transfer": true,
                   "car_estimated_cost": 1.1,
                   "car_model_year": 1,
@@ -258,6 +293,12 @@ import Api
                   "quotes": [
                     {
                       "company_name": "company_name",
+                      "company_name_ar": "company_name_ar",
+                      "type": "TPL",
+                      "insurance_type_display": "insurance_type_display",
+                      "insurance_type_display_ar": "insurance_type_display_ar",
+                      "company_logo_url": "company_logo_url",
+                      "square_company_logo_url": "square_company_logo_url",
                       "prices": [
                         {
                           "vat_percentage": 15
@@ -286,6 +327,7 @@ import Api
             phone: Optional("phone"),
             birthdate: Optional(CalendarDate("2023-01-15")!),
             carSequenceNumber: Optional(1),
+            customNumber: Optional("custom_number"),
             isOwnershipTransfer: Optional(true),
             carEstimatedCost: Optional(1.1),
             carModelYear: Optional(1),
@@ -300,6 +342,12 @@ import Api
             quotes: Optional([
                 QuoteResponseQuotesItem(
                     companyName: Optional("company_name"),
+                    companyNameAr: Optional("company_name_ar"),
+                    type: Optional(.tpl),
+                    insuranceTypeDisplay: Optional("insurance_type_display"),
+                    insuranceTypeDisplayAr: Optional("insurance_type_display_ar"),
+                    companyLogoUrl: Optional("company_logo_url"),
+                    squareCompanyLogoUrl: Optional("square_company_logo_url"),
                     prices: Optional([
                         QuotePrice(
                             vatPercentage: Optional(15)
@@ -319,10 +367,10 @@ import Api
         )
         let response = try await client.quotes.requestQuotes(
             request: .init(
+                otp: "123456",
                 ownerId: "owner_id",
                 phone: "phone",
                 birthdate: CalendarDate("2023-01-15")!,
-                carSequenceNumber: "car_sequence_number",
                 carEstimatedCost: 1.1
             ),
             requestOptions: RequestOptions(additionalHeaders: stub.headers)

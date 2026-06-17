@@ -1,19 +1,20 @@
 import Foundation
 
-public struct GetQuoteRequestsResponse: Codable, Hashable, Sendable {
+public struct PaginatedQuoteResponse: Codable, Hashable, Sendable {
     public let currentPage: Int?
     public let data: [QuoteResponse]?
     public let firstPageUrl: String?
     public let from: Nullable<Int>?
     public let lastPage: Int?
     public let lastPageUrl: String?
-    public let links: [GetQuoteRequestsResponseLinksItem]?
-    public let nextPageUrl: String?
+    public let links: [PaginationLink]?
+    public let nextPageUrl: Nullable<String>?
     public let path: String?
     public let perPage: Int?
-    public let prevPageUrl: String?
+    public let prevPageUrl: Nullable<String>?
     public let to: Nullable<Int>?
     public let total: Int?
+    public let aggregates: QuoteRequestAggregates?
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]
 
@@ -24,13 +25,14 @@ public struct GetQuoteRequestsResponse: Codable, Hashable, Sendable {
         from: Nullable<Int>? = nil,
         lastPage: Int? = nil,
         lastPageUrl: String? = nil,
-        links: [GetQuoteRequestsResponseLinksItem]? = nil,
-        nextPageUrl: String? = nil,
+        links: [PaginationLink]? = nil,
+        nextPageUrl: Nullable<String>? = nil,
         path: String? = nil,
         perPage: Int? = nil,
-        prevPageUrl: String? = nil,
+        prevPageUrl: Nullable<String>? = nil,
         to: Nullable<Int>? = nil,
         total: Int? = nil,
+        aggregates: QuoteRequestAggregates? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
         self.currentPage = currentPage
@@ -46,6 +48,7 @@ public struct GetQuoteRequestsResponse: Codable, Hashable, Sendable {
         self.prevPageUrl = prevPageUrl
         self.to = to
         self.total = total
+        self.aggregates = aggregates
         self.additionalProperties = additionalProperties
     }
 
@@ -57,13 +60,14 @@ public struct GetQuoteRequestsResponse: Codable, Hashable, Sendable {
         self.from = try container.decodeNullableIfPresent(Int.self, forKey: .from)
         self.lastPage = try container.decodeIfPresent(Int.self, forKey: .lastPage)
         self.lastPageUrl = try container.decodeIfPresent(String.self, forKey: .lastPageUrl)
-        self.links = try container.decodeIfPresent([GetQuoteRequestsResponseLinksItem].self, forKey: .links)
-        self.nextPageUrl = try container.decodeIfPresent(String.self, forKey: .nextPageUrl)
+        self.links = try container.decodeIfPresent([PaginationLink].self, forKey: .links)
+        self.nextPageUrl = try container.decodeNullableIfPresent(String.self, forKey: .nextPageUrl)
         self.path = try container.decodeIfPresent(String.self, forKey: .path)
         self.perPage = try container.decodeIfPresent(Int.self, forKey: .perPage)
-        self.prevPageUrl = try container.decodeIfPresent(String.self, forKey: .prevPageUrl)
+        self.prevPageUrl = try container.decodeNullableIfPresent(String.self, forKey: .prevPageUrl)
         self.to = try container.decodeNullableIfPresent(Int.self, forKey: .to)
         self.total = try container.decodeIfPresent(Int.self, forKey: .total)
+        self.aggregates = try container.decodeIfPresent(QuoteRequestAggregates.self, forKey: .aggregates)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }
 
@@ -77,12 +81,13 @@ public struct GetQuoteRequestsResponse: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.lastPage, forKey: .lastPage)
         try container.encodeIfPresent(self.lastPageUrl, forKey: .lastPageUrl)
         try container.encodeIfPresent(self.links, forKey: .links)
-        try container.encodeIfPresent(self.nextPageUrl, forKey: .nextPageUrl)
+        try container.encodeNullableIfPresent(self.nextPageUrl, forKey: .nextPageUrl)
         try container.encodeIfPresent(self.path, forKey: .path)
         try container.encodeIfPresent(self.perPage, forKey: .perPage)
-        try container.encodeIfPresent(self.prevPageUrl, forKey: .prevPageUrl)
+        try container.encodeNullableIfPresent(self.prevPageUrl, forKey: .prevPageUrl)
         try container.encodeNullableIfPresent(self.to, forKey: .to)
         try container.encodeIfPresent(self.total, forKey: .total)
+        try container.encodeIfPresent(self.aggregates, forKey: .aggregates)
     }
 
     /// Keys for encoding/decoding struct properties.
@@ -100,5 +105,6 @@ public struct GetQuoteRequestsResponse: Codable, Hashable, Sendable {
         case prevPageUrl = "prev_page_url"
         case to
         case total
+        case aggregates
     }
 }

@@ -2,6 +2,8 @@ import Foundation
 
 extension Requests {
     public struct PostQuoteRequestsRequest: Codable, Hashable, Sendable {
+        /// The OTP received by the customer from the Request OTP API
+        public let otp: String
         /// Owner ID must be 10 digits starting with 1, 2, or 7
         public let ownerId: String
         /// Email address must be valid and belongs to the customer
@@ -11,7 +13,9 @@ extension Requests {
         /// Birthdate in YYYY-MM-DD format
         public let birthdate: CalendarDate
         /// Car sequence number must be 8 or 9 digits
-        public let carSequenceNumber: String
+        public let carSequenceNumber: String?
+        /// Custom car number between 1000000 and 9999999999 (for newly imported cars)
+        public let customNumber: String?
         /// Indicates if the ownership is being transferred
         public let isOwnershipTransfer: Bool?
         /// Required if is_ownership_transfer is true; 10 digits starting with 1,2,7
@@ -28,11 +32,13 @@ extension Requests {
         public let additionalProperties: [String: JSONValue]
 
         public init(
+            otp: String,
             ownerId: String,
             email: String? = nil,
             phone: String,
             birthdate: CalendarDate,
-            carSequenceNumber: String,
+            carSequenceNumber: String? = nil,
+            customNumber: String? = nil,
             isOwnershipTransfer: Bool? = nil,
             currentCarOwnerId: String? = nil,
             carEstimatedCost: Double,
@@ -41,11 +47,13 @@ extension Requests {
             drivers: [PostQuoteRequestsRequestDriversItem]? = nil,
             additionalProperties: [String: JSONValue] = .init()
         ) {
+            self.otp = otp
             self.ownerId = ownerId
             self.email = email
             self.phone = phone
             self.birthdate = birthdate
             self.carSequenceNumber = carSequenceNumber
+            self.customNumber = customNumber
             self.isOwnershipTransfer = isOwnershipTransfer
             self.currentCarOwnerId = currentCarOwnerId
             self.carEstimatedCost = carEstimatedCost
@@ -57,11 +65,13 @@ extension Requests {
 
         public init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
+            self.otp = try container.decode(String.self, forKey: .otp)
             self.ownerId = try container.decode(String.self, forKey: .ownerId)
             self.email = try container.decodeIfPresent(String.self, forKey: .email)
             self.phone = try container.decode(String.self, forKey: .phone)
             self.birthdate = try container.decode(CalendarDate.self, forKey: .birthdate)
-            self.carSequenceNumber = try container.decode(String.self, forKey: .carSequenceNumber)
+            self.carSequenceNumber = try container.decodeIfPresent(String.self, forKey: .carSequenceNumber)
+            self.customNumber = try container.decodeIfPresent(String.self, forKey: .customNumber)
             self.isOwnershipTransfer = try container.decodeIfPresent(Bool.self, forKey: .isOwnershipTransfer)
             self.currentCarOwnerId = try container.decodeIfPresent(String.self, forKey: .currentCarOwnerId)
             self.carEstimatedCost = try container.decode(Double.self, forKey: .carEstimatedCost)
@@ -74,11 +84,13 @@ extension Requests {
         public func encode(to encoder: Encoder) throws -> Void {
             var container = encoder.container(keyedBy: CodingKeys.self)
             try encoder.encodeAdditionalProperties(self.additionalProperties)
+            try container.encode(self.otp, forKey: .otp)
             try container.encode(self.ownerId, forKey: .ownerId)
             try container.encodeIfPresent(self.email, forKey: .email)
             try container.encode(self.phone, forKey: .phone)
             try container.encode(self.birthdate, forKey: .birthdate)
-            try container.encode(self.carSequenceNumber, forKey: .carSequenceNumber)
+            try container.encodeIfPresent(self.carSequenceNumber, forKey: .carSequenceNumber)
+            try container.encodeIfPresent(self.customNumber, forKey: .customNumber)
             try container.encodeIfPresent(self.isOwnershipTransfer, forKey: .isOwnershipTransfer)
             try container.encodeIfPresent(self.currentCarOwnerId, forKey: .currentCarOwnerId)
             try container.encode(self.carEstimatedCost, forKey: .carEstimatedCost)
@@ -89,11 +101,13 @@ extension Requests {
 
         /// Keys for encoding/decoding struct properties.
         enum CodingKeys: String, CodingKey, CaseIterable {
+            case otp
             case ownerId = "owner_id"
             case email
             case phone
             case birthdate
             case carSequenceNumber = "car_sequence_number"
+            case customNumber = "custom_number"
             case isOwnershipTransfer = "is_ownership_transfer"
             case currentCarOwnerId = "current_car_owner_id"
             case carEstimatedCost = "car_estimated_cost"

@@ -2,6 +2,8 @@ import Foundation
 
 extension Requests {
     public struct PostPoliciesRequest: Codable, Hashable, Sendable {
+        /// The OTP received by the customer from the Issue OTP API
+        public let otp: String
         /// ID of the car quote request
         public let quoteRequestId: Int
         /// Unique identifier for the quote reference ID (coming from POST /quote-requests)
@@ -16,6 +18,7 @@ extension Requests {
         public let additionalProperties: [String: JSONValue]
 
         public init(
+            otp: String,
             quoteRequestId: Int,
             quoteReferenceId: String,
             quotePriceId: String,
@@ -23,6 +26,7 @@ extension Requests {
             extraFields: [String: JSONValue]? = nil,
             additionalProperties: [String: JSONValue] = .init()
         ) {
+            self.otp = otp
             self.quoteRequestId = quoteRequestId
             self.quoteReferenceId = quoteReferenceId
             self.quotePriceId = quotePriceId
@@ -33,6 +37,7 @@ extension Requests {
 
         public init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
+            self.otp = try container.decode(String.self, forKey: .otp)
             self.quoteRequestId = try container.decode(Int.self, forKey: .quoteRequestId)
             self.quoteReferenceId = try container.decode(String.self, forKey: .quoteReferenceId)
             self.quotePriceId = try container.decode(String.self, forKey: .quotePriceId)
@@ -44,6 +49,7 @@ extension Requests {
         public func encode(to encoder: Encoder) throws -> Void {
             var container = encoder.container(keyedBy: CodingKeys.self)
             try encoder.encodeAdditionalProperties(self.additionalProperties)
+            try container.encode(self.otp, forKey: .otp)
             try container.encode(self.quoteRequestId, forKey: .quoteRequestId)
             try container.encode(self.quoteReferenceId, forKey: .quoteReferenceId)
             try container.encode(self.quotePriceId, forKey: .quotePriceId)
@@ -53,6 +59,7 @@ extension Requests {
 
         /// Keys for encoding/decoding struct properties.
         enum CodingKeys: String, CodingKey, CaseIterable {
+            case otp
             case quoteRequestId = "quote_request_id"
             case quoteReferenceId = "quote_reference_id"
             case quotePriceId = "quote_price_id"

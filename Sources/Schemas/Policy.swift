@@ -11,6 +11,8 @@ public struct Policy: Codable, Hashable, Sendable {
     public let endDate: String?
     public let isClaimed: Bool?
     public let createdAt: String?
+    /// Timestamp when the provider policy document was attached. For issued motor policies this is the closest available issue/purchase timestamp.
+    public let uploadedAt: Nullable<Date>?
     public let updatedAt: String?
     public let clientId: String?
     public let canceledAt: Nullable<String>?
@@ -30,6 +32,7 @@ public struct Policy: Codable, Hashable, Sendable {
         endDate: String? = nil,
         isClaimed: Bool? = nil,
         createdAt: String? = nil,
+        uploadedAt: Nullable<Date>? = nil,
         updatedAt: String? = nil,
         clientId: String? = nil,
         canceledAt: Nullable<String>? = nil,
@@ -47,6 +50,7 @@ public struct Policy: Codable, Hashable, Sendable {
         self.endDate = endDate
         self.isClaimed = isClaimed
         self.createdAt = createdAt
+        self.uploadedAt = uploadedAt
         self.updatedAt = updatedAt
         self.clientId = clientId
         self.canceledAt = canceledAt
@@ -67,6 +71,7 @@ public struct Policy: Codable, Hashable, Sendable {
         self.endDate = try container.decodeIfPresent(String.self, forKey: .endDate)
         self.isClaimed = try container.decodeIfPresent(Bool.self, forKey: .isClaimed)
         self.createdAt = try container.decodeIfPresent(String.self, forKey: .createdAt)
+        self.uploadedAt = try container.decodeNullableIfPresent(Date.self, forKey: .uploadedAt)
         self.updatedAt = try container.decodeIfPresent(String.self, forKey: .updatedAt)
         self.clientId = try container.decodeIfPresent(String.self, forKey: .clientId)
         self.canceledAt = try container.decodeNullableIfPresent(String.self, forKey: .canceledAt)
@@ -88,6 +93,7 @@ public struct Policy: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.endDate, forKey: .endDate)
         try container.encodeIfPresent(self.isClaimed, forKey: .isClaimed)
         try container.encodeIfPresent(self.createdAt, forKey: .createdAt)
+        try container.encodeNullableIfPresent(self.uploadedAt, forKey: .uploadedAt)
         try container.encodeIfPresent(self.updatedAt, forKey: .updatedAt)
         try container.encodeIfPresent(self.clientId, forKey: .clientId)
         try container.encodeNullableIfPresent(self.canceledAt, forKey: .canceledAt)
@@ -107,6 +113,7 @@ public struct Policy: Codable, Hashable, Sendable {
         case endDate = "end_date"
         case isClaimed = "is_claimed"
         case createdAt = "created_at"
+        case uploadedAt = "uploaded_at"
         case updatedAt = "updated_at"
         case clientId = "client_id"
         case canceledAt = "canceled_at"
